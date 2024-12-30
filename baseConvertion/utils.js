@@ -1,7 +1,8 @@
+const charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
 export function base10ToBase62 (num) {
   if (num === 0) return '0'
 
-  const charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let result = ''
 
   while (num > 0) {
@@ -13,7 +14,6 @@ export function base10ToBase62 (num) {
 }
 
 export function base62ToBase10 (str) {
-  const charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let result = 0
 
   for (const char of str) {
