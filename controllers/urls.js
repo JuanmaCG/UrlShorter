@@ -14,8 +14,29 @@ export default class UrlController {
     }
   }
 
-  getUrlByShortUrl = async () => {
-
+  getUrlByShortUrl = async (shortUrl) => {
+    try {
+      const url = await Url.findOneAndUpdate(
+        { shortedUrl: shortUrl },
+        {
+          $inc: { visits: 1 },
+          $set: { lastVisited: Date.now() }
+        },
+        {
+          new: true, // Return updated document
+          upsert: false, // Don't create if not exists
+          runValidators: true
+        }
+      )
+      console.log('url', url)
+      if (!url) {
+        console.log('url not found')
+        throw new Error('URL not found')
+      }
+      return url
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   getUrlByLongId = async () => {

@@ -32,10 +32,14 @@ class URLService {
     }
   }
 
-  shortToLong (url) {
-    const key = url.substring('http://localhost:3000/'.length)
-    const n = base62ToBase10(key)
-    return this.stol.get(n)
+  shortToLong = async (url) => {
+    try {
+      const urlDb = await this.urlController.getUrlByShortUrl(url)
+      console.log('urlDb', urlDb)
+      return urlDb.originalUrl
+    } catch (err) {
+      throw new Error(err.message)
+    }
   }
 }
 

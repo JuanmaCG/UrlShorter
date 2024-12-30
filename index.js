@@ -1,4 +1,5 @@
 import * as mongo from './mongo.js'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import URLService from './services/urlService.js'
@@ -9,6 +10,7 @@ dotenv.config()
 const PORT = process.env.PORT ?? 3000
 
 app.use(express.json())
+app.use(cors())
 
 // {
 //   "longUrl": "url"
@@ -22,6 +24,19 @@ app.post('/', async (req, res) => {
     res.json(shortUrl)
   } catch (error) {
     res.status(500).json({ error: 'Error converting long url to short url' })
+  }
+})
+
+app.get('/:url', async (req, res) => {
+  const urlService = new URLService()
+  console.log('req.params', req.params)
+  const { url } = req.params
+  try {
+    const longUrl = await urlService.shortToLong(url)
+    console.log('longUrl', longUrl)
+    res.redirect(longUrl)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
   }
 })
 
