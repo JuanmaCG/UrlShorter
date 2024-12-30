@@ -10,6 +10,9 @@ const PORT = process.env.PORT ?? 3000
 
 app.use(express.json())
 
+// {
+//   "longUrl": "url"
+// }
 app.post('/', async (req, res) => {
   const urlService = new URLService()
   console.log('req.body', req.body)
