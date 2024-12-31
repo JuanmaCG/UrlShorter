@@ -1,4 +1,4 @@
-import { base10ToBase62, base62ToBase10 } from '../baseConvertion/utils.js'
+import { base10ToBase62 } from '../baseConvertion/utils.js'
 import UrlController from '../controllers/urls.js'
 import CounterController from '../controllers/counters.js'
 
@@ -8,27 +8,35 @@ class URLService {
     this.counterController = new CounterController()
   }
 
-  longToShort = async (longUrl) => {
+  longToShort = async (longUrl, alias) => {
     try {
-      const counter = await this.counterController.getCurrentCounter()
+      if (alias) {
+        const existingUrl = await this.urlController.findExistingAliasUrl(alias)
+        if (existingUrl) {
+          throw new Error('Alias already exists')
+        }
+      }
 
+      const counter = await this.counterController.getCurrentCounter()
       if (!counter || !counter.currentIncrement) {
         throw new Error('Invalid counter state')
       }
 
       const shortUrl = base10ToBase62(counter.currentIncrement)
+
       const [savedUrl, updatedCounter] = await Promise.all([
-        this.urlController.saveUrl({ shortUrl, longUrl }),
+        this.urlController.saveUrl({ shortUrl, longUrl }, alias),
+        // # TODO: Change to urlController
         this.counterController.updateCounter(counter)
       ])
-      console.log('savedUrl', savedUrl, 'updatedCounter', updatedCounter)
+      console.log('updatedCounter', updatedCounter)
       return {
-        shortUrl,
-        longUrl,
+        shortedUrl: savedUrl.shortedUrl,
+        longUrl: savedUrl.originalUrl,
         counter: counter.currentIncrement
       }
     } catch (error) {
-      throw new Error(`Error converting long to short: ${error.message}`)
+      throw new Error(`Error converting url: ${error.message}`)
     }
   }
 

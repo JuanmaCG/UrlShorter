@@ -27,6 +27,20 @@ app.post('/', async (req, res) => {
   }
 })
 
+app.post('/:alias', async (req, res) => {
+  const urlService = new URLService()
+  console.log('req.body', req.body)
+  console.log('req.params', req.params)
+  const { longUrl } = req.body
+  const { alias } = req.params
+  try {
+    const shortUrl = await urlService.longToShort(longUrl, alias)
+    res.json(shortUrl)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 app.get('/:url', async (req, res) => {
   const urlService = new URLService()
   console.log('req.params', req.params)
