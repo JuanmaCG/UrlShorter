@@ -3,7 +3,6 @@ export default class CounterController {
   getCurrentCounter = async () => {
     try {
       const counter = await Counter.find({})
-      console.log('counter', counter)
       if (counter.length === 0) {
         const newCounter = await this.createCounter()
         return newCounter

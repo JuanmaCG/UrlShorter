@@ -2,8 +2,6 @@ import Url from '../models/urls.js'
 
 export default class UrlController {
   saveUrl = async (url, alias) => {
-    console.log('url', url, 'alias', alias)
-
     const newUrl = new Url({
       originalUrl: url.longUrl,
       shortedUrl: url.shortUrl,
@@ -29,7 +27,6 @@ export default class UrlController {
         shortedUrl: aliasRequested,
         alias: aliasRequested
       })
-      console.log(newUrl, 'url a crear con alias')
       const savedUrl = await newUrl.save()
       return savedUrl
     } catch (error) {
@@ -40,6 +37,7 @@ export default class UrlController {
   getUrlByShortUrl = async (shortUrl) => {
     try {
       const url = await Url.findOneAndUpdate(
+        { $or: [{ shortedUrl: shortUrl }, { alias: shortUrl }] },
         { shortedUrl: shortUrl },
         {
           $inc: { visits: 1 },
@@ -49,12 +47,11 @@ export default class UrlController {
           }
         },
         {
-          new: true, // Return updated document
-          upsert: false, // Don't create if not exists
+          new: true,
+          upsert: false,
           runValidators: true
         }
       )
-      console.log('url', url)
       if (!url) {
         throw new Error('URL not found')
       }

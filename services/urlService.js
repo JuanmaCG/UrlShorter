@@ -1,6 +1,8 @@
 import { base10ToBase62 } from '../baseConvertion/utils.js'
 import UrlController from '../controllers/urls.js'
 import CounterController from '../controllers/counters.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 class URLService {
   constructor () {
@@ -29,11 +31,10 @@ class URLService {
         // # TODO: Change to urlController
         this.counterController.updateCounter(counter)
       ])
-      console.log('updatedCounter', updatedCounter)
       return {
-        shortedUrl: savedUrl.shortedUrl,
+        shortedUrl: `${process.env.BASE_URL}/${savedUrl.shortedUrl}`,
         longUrl: savedUrl.originalUrl,
-        counter: counter.currentIncrement
+        alias: `${process.env.BASE_URL}/${savedUrl.alias}`
       }
     } catch (error) {
       throw new Error(`Error converting url: ${error.message}`)
@@ -43,7 +44,6 @@ class URLService {
   shortToLong = async (url) => {
     try {
       const urlDb = await this.urlController.getUrlByShortUrl(url)
-      console.log('urlDb', urlDb)
       return urlDb.originalUrl
     } catch (err) {
       throw new Error(err.message)
