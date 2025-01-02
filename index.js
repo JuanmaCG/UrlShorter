@@ -3,6 +3,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import URLService from './services/urlService.js'
+import QRCode from 'qrcode'
+import { limiter } from './utils/rate-limit.js'
 
 const app = express()
 
@@ -11,6 +13,7 @@ const PORT = process.env.PORT ?? 3000
 
 app.use(express.json())
 app.use(cors())
+app.use(limiter)
 
 app.post('/', async (req, res) => {
   const urlService = new URLService()
@@ -29,6 +32,17 @@ app.get('/:url', async (req, res) => {
   try {
     const longUrl = await urlService.shortToLong(url)
     res.redirect(longUrl)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+app.post('/generateQr', async (req, res) => {
+  const { url } = req.body
+
+  try {
+    const qrCodeImage = await QRCode.toDataURL(url)
+    res.json({ qrCodeImage })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

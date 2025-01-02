@@ -1,4 +1,4 @@
-import { base10ToBase62 } from '../baseConvertion/utils.js'
+import { base10ToBase62 } from '../utils/baseConvertion.js'
 import UrlController from '../controllers/urls.js'
 import CounterController from '../controllers/counters.js'
 import dotenv from 'dotenv'
