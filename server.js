@@ -25,7 +25,7 @@ app.use('/api/shorten', shortenRoutes)
 app.listen(PORT, () => {
   if (isProduction) {
     console.log(`Server running in production mode on port ${PORT}`)
-    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`)
+    console.log('Swagger docs available at /api-docs')
   } else {
     console.log(`Server running in development mode at http://localhost:${PORT}`)
     console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`)
