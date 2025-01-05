@@ -4,6 +4,7 @@ import express from 'express'
 import { limiter } from './utils/rate-limit.js'
 import shortenRoutes from './routes/shorten.js'
 import apiRoutes from './routes/auth.js'
+import { setupSwagger } from './swagger/swagger.js'
 
 const app = express()
 
@@ -13,6 +14,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 // Add trust proxy configuration
 app.set('trust proxy', 1)
 
+setupSwagger(app)
 app.use(express.json())
 app.use(cors())
 app.use(limiter)
@@ -23,7 +25,9 @@ app.use('/api/shorten', shortenRoutes)
 app.listen(PORT, () => {
   if (isProduction) {
     console.log(`Server running in production mode on port ${PORT}`)
+    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`)
   } else {
     console.log(`Server running in development mode at http://localhost:${PORT}`)
+    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`)
   }
 })
