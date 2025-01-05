@@ -62,35 +62,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/shorten/{shortId}:
- *   get:
- *     summary: Redirect to original URL
- *     tags: [URLs]
- *     parameters:
- *       - in: path
- *         name: shortId
- *         required: true
- *         schema:
- *           type: string
- *         description: The short URL ID
- *     responses:
- *       302:
- *         description: Redirects to original URL
- *       404:
- *         description: URL not found
- */
-router.get('/:shortId', async (req, res) => {
-  try {
-    const longUrl = await urlService.shortToLong(req.params.shortId)
-    res.redirect(longUrl)
-  } catch (error) {
-    res.status(404).json({ error: error.message })
-  }
-})
-
-/**
- * @swagger
- * /api/shorten/{shortId}/qr:
+ * /api/shorten/{shortUrl}/qr:
  *   post:
  *     summary: Generate QR code for shortened URL
  *     tags: [URLs]
@@ -98,7 +70,7 @@ router.get('/:shortId', async (req, res) => {
  *       - BearerAuth: []
  *     parameters:
  *       - in: path
- *         name: shortId
+ *         name: shortUrl
  *         required: true
  *         schema:
  *           type: string
@@ -119,9 +91,9 @@ router.get('/:shortId', async (req, res) => {
  *       404:
  *         description: URL not found
  */
-router.post('/:shortId/qr', authenticateToken, async (req, res) => {
+router.post('/:shortUrl/qr', authenticateToken, async (req, res) => {
   try {
-    const url = `${process.env.BASE_URL}/api/shorten/${req.params.shortId}`
+    const url = `${process.env.BASE_URL}/api/shorten/${req.params.shortUrl}`
     const qrCodeImage = await QRCode.toDataURL(url)
     res.json({ qrCodeImage })
   } catch (error) {

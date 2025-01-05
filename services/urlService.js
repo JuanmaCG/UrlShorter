@@ -34,10 +34,10 @@ class URLService {
       console.log('Url saved on mongo db', savedUrl)
       return {
         shortedUrl: savedUrl.shortedUrl,
-        shortedCompleteUrl: `${process.env.BASE_URL}/shorten/${savedUrl.shortedUrl}`,
+        shortedCompleteUrl: `${process.env.BASE_URL}/${savedUrl.shortedUrl}`,
         longUrl: savedUrl.originalUrl,
         alias: savedUrl.alias || null,
-        aliasCompleteUrl: alias ? `${process.env.BASE_URL}/shorten/${alias}` : null
+        aliasCompleteUrl: alias ? `${process.env.BASE_URL}/${alias}` : null
       }
     } catch (error) {
       throw new Error(`Error converting url: ${error.message}`)
