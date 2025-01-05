@@ -30,7 +30,7 @@ class URLService {
         this.counterController.updateCounter(counter),
         client.setEx(shortUrl, 24 * 60 * 60, longUrl) // 24 hours
       ])
-      console.log('Url saved on redis', redis)
+      console.log('Url saved on redis db', redis)
       return {
         shortedUrl: `${process.env.BASE_URL}/${savedUrl.shortedUrl}`,
         longUrl: savedUrl.originalUrl,
