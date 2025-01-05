@@ -1,6 +1,6 @@
 import express from 'express'
 import { getToken } from '../controllers/auth.js'
-import { limiter } from '../middlewares/rate-limit.js'
+import { limiter } from '../utils/rate-limit.js'
 
 const router = express.Router()
 
