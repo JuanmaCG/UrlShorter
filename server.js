@@ -10,6 +10,9 @@ const app = express()
 const PORT = process.env.PORT ?? 3000
 const isProduction = process.env.NODE_ENV === 'production'
 
+// Add trust proxy configuration
+app.set('trust proxy', 1)
+
 app.use(express.json())
 app.use(cors())
 app.use(limiter)
