@@ -1,10 +1,7 @@
 import redis from 'redis'
 
 const client = redis.createClient({
-  socket: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379
-  }
+  url: process.env.REDIS_URL || `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
 })
 
 export const saveToken = async (token, ttl) => {
