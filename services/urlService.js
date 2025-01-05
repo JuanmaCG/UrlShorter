@@ -31,10 +31,13 @@ class URLService {
         client.setEx(shortUrl, 24 * 60 * 60, longUrl) // 24 hours
       ])
       console.log('Url saved on redis db', redis)
+      console.log('Url saved on mongo db', savedUrl)
       return {
-        shortedUrl: `${process.env.BASE_URL}/${savedUrl.shortedUrl}`,
+        shortedUrl: savedUrl.shortedUrl,
+        shortedCompleteUrl: `${process.env.BASE_URL}/shorten/${savedUrl.shortedUrl}`,
         longUrl: savedUrl.originalUrl,
-        alias: `${process.env.BASE_URL}/${savedUrl.alias}`
+        alias: savedUrl.alias || null,
+        aliasCompleteUrl: alias ? `${process.env.BASE_URL}/shorten/${alias}` : null
       }
     } catch (error) {
       throw new Error(`Error converting url: ${error.message}`)
@@ -53,7 +56,6 @@ class URLService {
         return cachedUrl
       }
 
-      // Medir tiempo de MongoDB
       const mongoStart = performance.now()
       const urlDb = await this.urlController.getUrlByShortUrl(url)
       const mongoTime = performance.now() - mongoStart
@@ -63,7 +65,6 @@ class URLService {
 
       if (!urlDb) throw new Error('URL not found')
 
-      // Guardar en Redis para futuras consultas
       await client.setEx(url, 30 * 24 * 60 * 60, urlDb.originalUrl)
 
       return urlDb.originalUrl
