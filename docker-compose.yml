@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_DB_URI=mongodb+srv://admin:06RJRuYF3BTcnkWf@cluster0.zwvtg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - PORT=3000
+      - BASE_URL=http://localhost:3000
+      - NODE_ENV=development
+      - JWT_SECRET=H3KJ89sDf7_$mK9#pL2@qR5*vN8&xZ4!wY1^cB6
+      - JWT_EXPIRATION=86400 # 24 hours
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--appendonly", "yes" ]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
