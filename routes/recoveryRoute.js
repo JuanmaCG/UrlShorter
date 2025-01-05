@@ -6,7 +6,7 @@ const urlService = new URLService()
 
 /**
  * @swagger
- * /api/shorten/{shortUrl}:
+ * /{shortUrl}:
  *   get:
  *     summary: Redirect to original URL
  *     tags: [URLs]
