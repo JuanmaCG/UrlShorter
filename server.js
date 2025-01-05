@@ -1,7 +1,7 @@
 import * as mongo from './mongo.js'
 import cors from 'cors'
 import express from 'express'
-import { limiter } from './utils/rate-limit.js'
+import { limiter } from './middlewares/rate-limit.js'
 import shortenRoutes from './routes/shorten.js'
 import apiRoutes from './routes/auth.js'
 import requestRoute from './routes/recoveryRoute.js'
