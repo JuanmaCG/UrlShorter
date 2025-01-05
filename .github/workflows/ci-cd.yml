@@ -27,8 +27,9 @@ jobs:
       - name: Deploy to Render
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
           curl -X POST \
           -H "Authorization: Bearer $RENDER_API_KEY" \
           -d '{}' \
-          "https://api.render.com/deploy/srv-ctqnl08gph6c73clp90g"
+          $RENDER_DEPLOY_HOOK
